@@ -149,6 +149,11 @@ npm start
 - Errors shown only after field is touched/dirty
 - On success: toast notification → auto-redirect to detail view
 
+
+<img width="1912" height="975" alt="Screenshot 2026-04-17 101157" src="https://github.com/user-attachments/assets/bc29c401-fe3b-4f68-ad21-3931e1360918" />
+
+<img width="1917" height="969" alt="image" src="https://github.com/user-attachments/assets/bfef9476-8a17-4101-94ee-c8b3c0a4ebf9" />
+
 ### Django (no DRF)
 - Pure Django `View` classes with `JsonResponse`
 - CSRF disabled on API views via `@csrf_exempt` (appropriate for API-only endpoints)
