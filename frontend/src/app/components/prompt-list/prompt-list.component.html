@@ -1,0 +1,41 @@
+<div class="page-header">
+  <p class="prompt-line">~ / prompts</p>
+  <h1>All <span>Prompts</span></h1>
+</div>
+
+<div *ngIf="loading" class="loading-state">
+  <div class="spinner"></div>
+  <p>Fetching prompts...</p>
+</div>
+
+<div *ngIf="error" class="error-state">
+  <p>⚠ Could not connect to API. Is the backend running?</p>
+</div>
+
+<div *ngIf="!loading && !error && prompts.length === 0" class="empty-state">
+  <div class="icon">◇</div>
+  <p>No prompts yet. <a routerLink="/prompts/new" style="color:var(--accent)">Add the first one.</a></p>
+</div>
+
+<div *ngIf="!loading && !error && prompts.length > 0" class="card-grid">
+  <a
+    *ngFor="let prompt of prompts; let i = index"
+    class="prompt-card"
+    [routerLink]="['/prompts', prompt.id]"
+  >
+    <div class="card-index">#{{ (i + 1).toString().padStart(3, '0') }}</div>
+    <div class="card-title">{{ prompt.title }}</div>
+    <div class="card-meta">
+      <div class="complexity-badge">
+        <div class="complexity-bar">
+          <div
+            *ngFor="let filled of getPips(prompt.complexity); let j = index"
+            [class]="pipClass(filled, prompt.complexity)"
+          ></div>
+        </div>
+        <span>{{ prompt.complexity }}/10</span>
+      </div>
+      <span style="color:var(--text-muted);font-size:0.7rem;margin-left:auto">{{ formatDate(prompt.created_at) }}</span>
+    </div>
+  </a>
+</div>

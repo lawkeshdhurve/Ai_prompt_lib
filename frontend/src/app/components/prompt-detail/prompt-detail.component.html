@@ -1,0 +1,56 @@
+<div *ngIf="loading" class="loading-state">
+  <div class="spinner"></div>
+  <p>Loading prompt...</p>
+</div>
+
+<div *ngIf="error" class="error-state">
+  <p>⚠ Prompt not found or API unreachable.</p>
+  <button class="btn btn-ghost" style="margin-top:1rem" (click)="goBack()">← Back to list</button>
+</div>
+
+<ng-container *ngIf="!loading && !error && prompt">
+  <button class="detail-back" (click)="goBack()">← BACK</button>
+
+  <div class="detail-card">
+    <div class="detail-header">
+      <div>
+        <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:.1em;margin-bottom:.4rem">
+          ~ / prompts / {{ prompt.id.slice(0,8) }}...
+        </div>
+        <h1 class="detail-title">{{ prompt.title }}</h1>
+      </div>
+      <div class="view-counter">
+        <span class="count">{{ prompt.view_count }}</span>
+        <span class="label">views</span>
+      </div>
+    </div>
+
+    <div class="detail-meta">
+      <div class="meta-item">
+        <span class="meta-label">Complexity</span>
+        <div style="display:flex;align-items:center;gap:.5rem;margin-top:.1rem">
+          <div class="complexity-bar">
+            <div
+              *ngFor="let filled of getPips(prompt.complexity)"
+              [class]="pipClass(filled, prompt.complexity)"
+            ></div>
+          </div>
+          <span class="meta-value">{{ prompt.complexity }} / 10</span>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Created</span>
+        <span class="meta-value">{{ formatDate(prompt.created_at) }}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">ID</span>
+        <span class="meta-value" style="font-size:0.75rem;color:var(--text-dim)">{{ prompt.id }}</span>
+      </div>
+    </div>
+
+    <div class="detail-content">
+      <div class="content-label">Prompt Content</div>
+      <div class="content-body">{{ prompt.content }}</div>
+    </div>
+  </div>
+</ng-container>

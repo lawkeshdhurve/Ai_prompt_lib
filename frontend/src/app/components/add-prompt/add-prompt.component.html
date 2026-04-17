@@ -1,0 +1,88 @@
+<div class="page-header">
+  <p class="prompt-line">~ / prompts / new</p>
+  <h1>New <span>Prompt</span></h1>
+</div>
+
+<form class="form-card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+  <!-- Title -->
+  <div class="field">
+    <label class="field-label" for="title">Title <span class="req">*</span></label>
+    <input
+      id="title"
+      class="field-input"
+      [class.invalid]="isInvalid(title)"
+      type="text"
+      formControlName="title"
+      placeholder="e.g. Cyberpunk City at Dusk"
+      autocomplete="off"
+    >
+    <div class="field-hint" *ngIf="!isInvalid(title)">Min 3 characters</div>
+    <div class="field-error" *ngIf="isInvalid(title)">
+      <span>✕</span>
+      <span *ngIf="title.errors?.['required']">Title is required.</span>
+      <span *ngIf="title.errors?.['minlength']">
+        Title must be at least 3 characters
+        ({{ title.errors?.['minlength']?.actualLength }}/3).
+      </span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="field">
+    <label class="field-label" for="content">Content <span class="req">*</span></label>
+    <textarea
+      id="content"
+      class="field-textarea"
+      [class.invalid]="isInvalid(content)"
+      formControlName="content"
+      placeholder="Describe your AI image generation prompt in detail..."
+      rows="5"
+    ></textarea>
+    <div class="field-hint" *ngIf="!isInvalid(content)">
+      Min 20 characters · {{ content.value?.length || 0 }} typed
+    </div>
+    <div class="field-error" *ngIf="isInvalid(content)">
+      <span>✕</span>
+      <span *ngIf="content.errors?.['required']">Content is required.</span>
+      <span *ngIf="content.errors?.['minlength']">
+        Need {{ content.errors?.['minlength']?.requiredLength - content.errors?.['minlength']?.actualLength }} more characters
+        ({{ content.errors?.['minlength']?.actualLength }}/20).
+      </span>
+    </div>
+  </div>
+
+  <!-- Complexity -->
+  <div class="field">
+    <label class="field-label">Complexity <span class="req">*</span></label>
+    <div class="complexity-row">
+      <span class="complexity-value">{{ complexityValue }}</span>
+      <input
+        type="range"
+        formControlName="complexity"
+        min="1"
+        max="10"
+        step="1"
+      >
+      <div class="complexity-bar" style="gap:3px">
+        <div
+          *ngFor="let filled of getPips(complexityValue)"
+          [class]="filled ? 'complexity-pip filled' : 'complexity-pip'"
+        ></div>
+      </div>
+    </div>
+    <div class="field-hint">1 = simple concept · 10 = maximum complexity</div>
+  </div>
+
+  <!-- Actions -->
+  <div style="display:flex;gap:.75rem;margin-top:.5rem">
+    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+      <span *ngIf="!submitting">+ CREATE PROMPT</span>
+      <span *ngIf="submitting">SAVING...</span>
+    </button>
+    <button type="button" class="btn btn-ghost" (click)="form.reset({complexity:5})">RESET</button>
+  </div>
+
+</form>
+
+<div class="toast" *ngIf="showToast">✓ Prompt created — redirecting...</div>
